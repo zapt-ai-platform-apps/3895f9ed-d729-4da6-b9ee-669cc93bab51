@@ -1,5 +1,5 @@
 import React from 'react';
-import QuestionAnswer from './QuestionAnswer';
+import QuestionAnswer from './features/question-answer/QuestionAnswer';
 
 export default function App() {
   return (
