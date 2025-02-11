@@ -12,12 +12,21 @@ export default function QuestionAnswer() {
     setLoading(true);
     setAnswer('');
     try {
-      console.log('Sending question to API:', question);
-      // Simulate an API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const apiAnswer = "This is the answer!";
-      setAnswer(apiAnswer);
-      console.log('Received answer from API:', apiAnswer);
+      console.log('Sending question to AI API:', question);
+      const response = await fetch(import.meta.env.VITE_PUBLIC_AI_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_PUBLIC_AI_API_KEY}`,
+        },
+        body: JSON.stringify({ question })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch answer');
+      }
+      const data = await response.json();
+      setAnswer(data.answer);
+      console.log('Received answer from AI API:', data.answer);
     } catch (error) {
       console.error('Error fetching answer:', error);
       Sentry.captureException(error);
